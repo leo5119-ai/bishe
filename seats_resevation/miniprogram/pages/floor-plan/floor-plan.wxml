@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="floor-header">
+    <view class="floor-title">{{floorName}}</view>
+    <view class="floor-tip">点击座位可预约</view>
+  </view>
+
+  <view class="legend-bar">
+    <view class="legend-item">
+      <view class="legend-dot available"></view>
+      <text>可预约</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot occupied"></view>
+      <text>已占用</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot mine"></view>
+      <text>我的</text>
+    </view>
+    <view class="legend-item">
+      <view class="legend-dot maintenance"></view>
+      <text>维护</text>
+    </view>
+  </view>
+
+  <scroll-view scroll-x scroll-y class="floor-scroll" enhanced show-scrollbar="false">
+    <view class="floor-map">
+      <view class="wall-frame">
+        <view class="entrance" wx:if="{{floor === 1}}">
+          <text class="entrance-text">入口</text>
+          <view class="entrance-arrow"></view>
+        </view>
+
+        <view class="facility restroom">
+          <text>卫生间</text>
+        </view>
+
+        <view class="facility stairs">
+          <text>楼梯</text>
+        </view>
+
+        <block wx:for="{{tables}}" wx:key="id">
+          <view 
+            class="table {{item.label === '书架' ? 'bookshelf' : ''}}"
+            style="left: {{item.x}}px; top: {{item.y}}px; width: {{item.width}}px; height: {{item.height}}px;"
+          >
+            <text class="table-label">{{item.label}}</text>
+          </view>
+        </block>
+
+        <block wx:for="{{currentSeats}}" wx:key="id">
+          <view 
+            class="seat {{item.seatStatus}} {{item.id === selectedSeatId ? 'selected' : ''}}"
+            style="left: {{item.x}}px; top: {{item.y}}px;"
+            data-id="{{item.id}}"
+            data-status="{{item.seatStatus}}"
+            bindtap="onSeatTap"
+          />
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="action-bar" wx:if="{{selectedSeatId && selectedSeatStatus === 'available'}}">
+    <view class="action-info">
+      <text class="action-seat">座位 {{selectedSeatId}}</text>
+    </view>
+    <van-button type="primary" size="small" round bindtap="goToReserve">立即预约</van-button>
+  </view>
+</view>

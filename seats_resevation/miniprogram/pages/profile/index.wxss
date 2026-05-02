@@ -1,0 +1,274 @@
+page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+}
+
+.header {
+  background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+  padding: 100rpx 40rpx 60rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-box {
+  width: 140rpx;
+  height: 140rpx;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.avatar-icon {
+  font-size: 72rpx;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+}
+
+.content {
+  padding: 30rpx 40rpx;
+  margin-top: -30rpx;
+}
+
+.credit-section {
+  margin-bottom: 24rpx;
+}
+
+.credit-card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
+}
+
+.credit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.credit-title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.credit-badge {
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.credit-badge.good {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.credit-badge.mid {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.credit-badge.low {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.credit-body {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 16rpx;
+}
+
+.credit-num {
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #1a73e8;
+}
+
+.credit-max {
+  font-size: 28rpx;
+  color: #999;
+  margin-left: 4rpx;
+}
+
+.credit-bar {
+  height: 12rpx;
+  background: #eee;
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  transition: width 0.3s;
+}
+
+.bar-fill.good { background: #4caf50; }
+.bar-fill.mid { background: #ff9800; }
+.bar-fill.low { background: #f44336; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.stat-box {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.04);
+}
+
+.stat-num {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1a73e8;
+  margin-bottom: 6rpx;
+}
+
+.stat-label {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.menu-list {
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 32rpx;
+  margin-right: 20rpx;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.menu-text.logout {
+  color: #e53935;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+.popup-content {
+  padding: 40rpx 30rpx;
+}
+
+.popup-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: block;
+  text-align: center;
+  margin-bottom: 10rpx;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+
+.nickname-input {
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  font-size: 28rpx;
+  margin: 30rpx 0;
+}
+
+.rules-popup {
+  padding: 40rpx 30rpx;
+}
+
+.rules-header {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.rules-content {
+  margin-bottom: 30rpx;
+}
+
+.rule-item {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 12rpx;
+}
+
+.help-popup {
+  padding: 40rpx 30rpx;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.help-header {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.help-content {
+  margin-bottom: 30rpx;
+}
+
+.help-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.help-item {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}

@@ -1,0 +1,163 @@
+<view class="container">
+  <van-tabs active="{{ activeTab }}" bind:change="onTabChange" sticky>
+    <van-tab title="座位管理" name="seats">
+      <view class="tab-content">
+        <view class="floor-tabs">
+          <view class="floor-tab {{selectedFloor === 1 ? 'active' : ''}}" data-floor="1" bindtap="onSelectFloor">1楼</view>
+          <view class="floor-tab {{selectedFloor === 2 ? 'active' : ''}}" data-floor="2" bindtap="onSelectFloor">2楼</view>
+          <view class="floor-tab {{selectedFloor === 3 ? 'active' : ''}}" data-floor="3" bindtap="onSelectFloor">3楼</view>
+        </view>
+
+        <view class="seat-info">
+          <text>楼层: {{selectedFloor}}楼 | 座位数: {{seats.length}}</text>
+        </view>
+
+        <view class="seat-grid">
+          <view
+            class="seat-item {{seat.status}} {{seat.isOccupied ? 'occupied' : ''}}"
+            wx:for="{{seats}}"
+            wx:for-item="seat"
+            wx:key="_id"
+          >
+            <view class="seat-num">{{seat.seatNo || seat.seatId}}</view>
+            <view class="seat-status">
+              <van-tag type="{{seat.status === 'maintenance' ? 'warning' : seat.isOccupied ? 'danger' : 'success'}}">
+                {{seat.status === 'maintenance' ? '维护' : seat.isOccupied ? '占用' : '空闲'}}
+              </van-tag>
+            </view>
+            <view class="seat-toggle" data-id="{{seat._id}}" data-status="{{seat.status}}" bindtap="onToggleMaintenance">
+              <text>{{seat.status === 'maintenance' ? '取消维护' : '设为维护'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </van-tab>
+
+    <van-tab title="用户管理" name="users">
+      <view class="tab-content">
+        <view class="section-header">
+          <text class="section-title">用户列表 ({{users.length}})</text>
+          <van-button size="small" plain icon="replay" bind:click="onRefreshUsers">
+            刷新
+          </van-button>
+        </view>
+
+        <view class="user-list">
+          <view
+            class="user-item"
+            wx:for="{{users}}"
+            wx:key="_id"
+          >
+            <view class="user-info">
+              <view class="user-name">
+                <text>{{item.nickName || '匿名用户'}}</text>
+                <van-tag type="{{item.role === 'admin' ? 'danger' : 'default'}}" size="small">
+                  {{item.role === 'admin' ? '管理员' : '普通用户'}}
+                </van-tag>
+              </view>
+              <view class="user-credit">
+                <text>信用分: {{item.credit || 100}}</text>
+              </view>
+            </view>
+            <view class="user-actions">
+              <van-button size="small" plain bindtap="onAdjustCredit" data-id="{{item._id}}" data-credit="{{item.credit}}">调整信用</van-button>
+              <van-button size="small" type="{{item.role === 'admin' ? 'default' : 'danger'}}" bindtap="onToggleAdmin" data-id="{{item._id}}" data-role="{{item.role}}">
+                {{item.role === 'admin' ? '取消管理' : '设为管理'}}
+              </van-button>
+            </view>
+          </view>
+
+          <view class="empty" wx:if="{{users.length === 0}}">
+            <text>暂无用户</text>
+          </view>
+        </view>
+      </view>
+    </van-tab>
+
+    <van-tab title="数据统计" name="stats">
+      <view class="tab-content">
+        <view class="stats-card">
+          <view class="stats-title">今日概况</view>
+          <view class="stats-grid">
+            <view class="stats-item">
+              <text class="stats-value">{{todayStats.totalSeats}}</text>
+              <text class="stats-label">总座位</text>
+            </view>
+            <view class="stats-item">
+              <text class="stats-value success">{{todayStats.occupied}}</text>
+              <text class="stats-label">已预约</text>
+            </view>
+            <view class="stats-item">
+              <text class="stats-value">{{todayStats.available}}</text>
+              <text class="stats-label">空闲</text>
+            </view>
+            <view class="stats-item">
+              <text class="stats-value warning">{{todayStats.maintenance}}</text>
+              <text class="stats-label">维护中</text>
+            </view>
+          </view>
+          <view class="usage-rate">
+            <text>使用率：</text>
+            <van-tag type="primary" size="large">
+              {{todayStats.totalSeats > 0 ? Math.round(todayStats.occupied / todayStats.totalSeats * 100) : 0}}%
+            </van-tag>
+          </view>
+        </view>
+
+        <view class="qrcode-section">
+          <view class="section-header">
+            <text class="section-title">签到二维码</text>
+          </view>
+          <view class="qrcode-display">
+            <image class="qrcode-img" src="{{qrcodeUrl}}" mode="aspectFit" wx:if="{{qrcodeUrl}}"></image>
+            <view class="qrcode-tip" wx:if="{{qrcodeUrl}}">将此二维码显示在图书馆入口处</view>
+            <view class="qrcode-tip" wx:if="{{qrcodeUrl}}">学生扫码即可完成签到</view>
+          </view>
+          <van-button type="primary" block bindtap="onGenerateQRCode">生成签到码</van-button>
+        </view>
+
+        <view class="init-section">
+          <view class="section-header">
+            <text class="section-title">数据初始化</text>
+          </view>
+          <view class="init-buttons">
+            <van-button type="warning" size="small" bindtap="onInitDatabase">
+              创建集合
+            </van-button>
+            <van-button type="primary" size="small" bindtap="onInitSeats">
+              初始化座位
+            </van-button>
+          </view>
+          <view class="init-tip">初始化座位会重置所有楼层的座位数据</view>
+        </view>
+      </view>
+    </van-tab>
+  </van-tabs>
+
+  <van-popup show="{{ showCreditEditor }}" round closeable position="bottom" bind:close="onCancelCredit">
+    <view class="editor-popup">
+      <view class="editor-header">
+        <text class="editor-title">调整信用分</text>
+      </view>
+      <view class="credit-editor">
+        <input
+          class="credit-input"
+          type="number"
+          value="{{ editingCredit }}"
+          placeholder="信用分 (0-100)"
+          maxlength="3"
+          bindinput="onCreditInput"
+        />
+        <text class="credit-hint">信用分范围: 0-100</text>
+      </view>
+      <view class="editor-actions">
+        <van-button type="default" size="large" round bind:click="onCancelCredit">
+          取消
+        </van-button>
+        <van-button type="primary" size="large" round bind:click="onConfirmCredit">
+          确认
+        </van-button>
+      </view>
+    </view>
+  </van-popup>
+</view>

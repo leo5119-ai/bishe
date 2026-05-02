@@ -1,0 +1,63 @@
+<view class="container">
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <van-loading type="spinner" color="#1a73e8" size="50rpx">加载中...</van-loading>
+  </view>
+
+  <swiper class="header-swiper" wx:if="{{!loading}}" circular autoplay interval="4000">
+    <swiper-item>
+      <view class="banner-overlay">
+        <view class="banner-logo">📚</view>
+        <view class="banner-text">
+          <text class="banner-title">图书馆座位预约系统</text>
+          <text class="banner-subtitle">座位预约系统</text>
+        </view>
+      </view>
+    </swiper-item>
+    <swiper-item wx:for="{{bannerImages}}" wx:key="index">
+      <image class="banner-image" src="{{item}}" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <view class="content" wx:if="{{!loading}}">
+    <view class="card stats-card">
+      <view class="stat-main">
+        <text class="stat-value">{{todayStats.availableSeats}}</text>
+        <text class="stat-unit">席</text>
+      </view>
+      <view class="stat-info">
+        <text class="stat-text">当前空闲座位</text>
+        <view class="stat-sub">
+          <text>今日预约 {{todayStats.totalReservations}}</text>
+          <text class="dot">·</text>
+          <text>使用率 {{todayStats.occupiedRate}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-title">选择楼层</view>
+
+    <view class="floor-grid">
+      <view class="floor-item floor-1" data-floor="1" bindtap="goToFloorPlan">
+        <view class="floor-icon">📚</view>
+        <view class="floor-text">
+          <text class="floor-name">1楼</text>
+          <text class="floor-desc">入口阅读区</text>
+        </view>
+      </view>
+      <view class="floor-item floor-2" data-floor="2" bindtap="goToFloorPlan">
+        <view class="floor-icon">📖</view>
+        <view class="floor-text">
+          <text class="floor-name">2楼</text>
+          <text class="floor-desc">安静自习区</text>
+        </view>
+      </view>
+      <view class="floor-item floor-3" data-floor="3" bindtap="goToFloorPlan">
+        <view class="floor-icon">💻</view>
+        <view class="floor-text">
+          <text class="floor-name">3楼</text>
+          <text class="floor-desc">多媒体学习区</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

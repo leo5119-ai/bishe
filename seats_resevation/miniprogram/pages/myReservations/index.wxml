@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="tab-header">
+    <view class="tab-item left {{activeTab === 'today' ? 'active' : ''}}" bindtap="onTabChange" data-tab="today">今日</view>
+    <view class="tab-item right {{activeTab === 'history' ? 'active' : ''}}" bindtap="onTabChange" data-tab="history">历史</view>
+  </view>
+
+  <view class="tab-content" wx:if="{{activeTab === 'today'}}">
+    <view class="empty-state" wx:if="{{todayReservations.length === 0 && !loading}}">
+      <text class="empty-icon">📅</text>
+      <text class="empty-text">今日暂无预约</text>
+      <text class="empty-hint">去预约一个座位吧</text>
+    </view>
+
+    <view class="reservation-list" wx:else>
+      <view class="res-card" 
+            wx:for="{{todayReservations}}" 
+            wx:key="_id">
+        <view class="res-header">
+          <text class="res-seat">{{item.floor}}楼 {{item.seatNo}}</text>
+          <text class="res-status {{item.statusLabel === '待签到' ? 'wait' : item.statusLabel === '已结束' ? 'ended' : 'done'}}">{{item.statusLabel}}</text>
+        </view>
+        <view class="res-time">
+          <text>{{item.startTime}} - {{item.endTime}}</text>
+        </view>
+        <view class="res-actions" wx:if="{{item.statusLabel === '待签到'}}">
+          <van-button type="default" size="small" round bind:click="onCancel" data-id="{{item._id}}">取消</van-button>
+          <van-button type="primary" size="small" round bindtap="onCardCheckIn" data-id="{{item._id}}">签到</van-button>
+        </view>
+        <view class="res-actions center" wx:if="{{item.statusLabel === '已签到'}}">
+          <van-button type="warning" size="small" round bindtap="onEndUse" data-id="{{item._id}}">结束使用</van-button>
+        </view>
+      </view>
+
+      <view class="checkin-banner" wx:if="{{todayReservations.length > 0}}">
+        <van-button type="primary" block round size="large" icon="scan" bindtap="onCheckIn">
+          扫码签到
+        </van-button>
+      </view>
+    </view>
+  </view>
+
+  <view class="tab-content" wx:if="{{activeTab === 'history'}}">
+    <view class="empty-state" wx:if="{{historyReservations.length === 0 && !loading}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无历史记录</text>
+    </view>
+
+    <view class="history-list" wx:else>
+      <view class="history-item" wx:for="{{historyReservations}}" wx:key="_id">
+        <view class="history-main">
+          <text class="history-seat">{{item.floor}}楼 {{item.seatNo}}</text>
+          <text class="history-status {{item.statusLabel === '已过期' ? 'expired' : 'cancelled'}}">{{item.statusLabel}}</text>
+        </view>
+        <text class="history-time">{{item.date}} {{item.startTime}}-{{item.endTime}}</text>
+      </view>
+    </view>
+  </view>
+</view>

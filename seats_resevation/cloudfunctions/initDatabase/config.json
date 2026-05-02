@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "openapi": [],
+    "db": {
+      "COLLECTION_META:users": "read",
+      "COLLECTION_META:seats": "read",
+      "COLLECTION_META:reservations": "read",
+      "COLLECTION_META:announcements": "read"
+    }
+  }
+}

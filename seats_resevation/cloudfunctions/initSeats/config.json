@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "openapi": [],
+    "db": {
+      "COLLECTION_META:seats": "read"
+    }
+  }
+}

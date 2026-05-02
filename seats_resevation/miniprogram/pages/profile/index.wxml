@@ -1,0 +1,130 @@
+<view class="container">
+  <view class="header">
+    <view class="avatar-box">
+      <text class="avatar-icon">👤</text>
+    </view>
+    <text class="nickname" bindtap="onEditNickname">{{nickname}}</text>
+  </view>
+
+  <view class="content">
+    <view class="credit-section">
+      <view class="credit-card">
+        <view class="credit-header">
+          <text class="credit-title">信用分</text>
+          <view class="credit-badge {{credit >= 80 ? 'good' : credit >= 60 ? 'mid' : 'low'}}">
+            {{credit >= 80 ? '优秀' : credit >= 60 ? '良好' : '较差'}}
+          </view>
+        </view>
+        <view class="credit-body">
+          <text class="credit-num">{{credit}}</text>
+          <text class="credit-max">/100</text>
+        </view>
+        <view class="credit-bar">
+          <view class="bar-fill {{credit >= 80 ? 'good' : credit >= 60 ? 'mid' : 'low'}}" style="width: {{credit}}%"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="stats-grid">
+      <view class="stat-box">
+        <text class="stat-num">{{consecutiveDays}}</text>
+        <text class="stat-label">连续签到</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-num">{{weekReservationCount}}</text>
+        <text class="stat-label">本周预约</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-num">{{monthReservationCount}}</text>
+        <text class="stat-label">本月预约</text>
+      </view>
+      <view class="stat-box">
+        <text class="stat-num">{{totalReservationCount}}</text>
+        <text class="stat-label">历史签到</text>
+      </view>
+    </view>
+
+    <view class="menu-list">
+      <view class="menu-item" bindtap="onGoToAdmin" wx:if="{{isAdmin}}">
+        <text class="menu-icon">⚙️</text>
+        <text class="menu-text">管理后台</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="onEditNickname">
+        <text class="menu-icon">✏️</text>
+        <text class="menu-text">修改昵称</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="onShowRules">
+        <text class="menu-icon">📋</text>
+        <text class="menu-text">预约规则</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="onShowHelp">
+        <text class="menu-icon">❓</text>
+        <text class="menu-text">帮助与反馈</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-item" bindtap="onLogout">
+        <text class="menu-icon">🚪</text>
+        <text class="menu-text logout">退出登录</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <van-popup show="{{ showNicknameEditor }}" round position="bottom">
+    <view class="popup-content">
+      <text class="popup-title">修改昵称</text>
+      <input
+        class="nickname-input"
+        value="{{ editNickname }}"
+        placeholder="请输入昵称"
+        maxlength="20"
+        bindinput="onNicknameInput"
+        focus="{{showNicknameEditor}}"
+      />
+      <view class="popup-actions">
+        <van-button size="medium" round bind:click="onCancelEdit">取消</van-button>
+        <van-button type="primary" size="medium" round bind:click="onSaveNickname">保存</van-button>
+      </view>
+    </view>
+  </van-popup>
+
+  <van-popup show="{{ showRules }}" round position="bottom" bind:close="onCloseRules">
+    <view class="rules-popup">
+      <view class="rules-header">预约规则</view>
+      <view class="rules-content">
+        <view class="rule-item">1. 开放预约时间：每日 08:00-22:00</view>
+        <view class="rule-item">2. 预约开始时间：仅限当前时间起30分钟内</view>
+        <view class="rule-item">3. 预约时长：30/60/90/120/150/180分钟可选</view>
+        <view class="rule-item">4. 预约时间粒度：5分钟</view>
+        <view class="rule-item">5. 签到时限：预约开始时间后15分钟内</view>
+        <view class="rule-item">6. 迟到超过15分钟自动取消，扣10分信用</view>
+        <view class="rule-item">7. 预约后不签到，扣10分信用</view>
+        <view class="rule-item">8. 可提前结束使用座位</view>
+        <view class="rule-item">9. 信用分低于20分无法预约</view>
+        <view class="rule-item">10. 信用分80分以上为优秀</view>
+      </view>
+      <van-button type="primary" block round bindtap="onCloseRules">我知道了</van-button>
+    </view>
+  </van-popup>
+
+  <van-popup show="{{ showHelp }}" round position="bottom" bind:close="onCloseHelp">
+    <view class="help-popup">
+      <view class="help-header">帮助与反馈</view>
+      <view class="help-content">
+        <view class="help-title">常见问题</view>
+        <view class="help-item">Q: 如何预约座位？</view>
+        <view class="help-item">A: 首页选择楼层，点击空闲座位，选择时间后确认预约。</view>
+        <view class="help-item">Q: 忘记签到怎么办？</view>
+        <view class="help-item">A: 超过预约时间未签到会自动取消，信用分会被扣减。</view>
+        <view class="help-item">Q: 如何取消预约？</view>
+        <view class="help-item">A: 在"我的预约"页面点击"取消"按钮。</view>
+        <view class="help-title" style="margin-top: 30rpx;">联系我们</view>
+        <view class="help-item">如有问题请联系图书馆管理员</view>
+      </view>
+      <van-button type="primary" block round bindtap="onCloseHelp">关闭</van-button>
+    </view>
+  </van-popup>
+</view>

@@ -1,0 +1,64 @@
+<view class="container">
+  <van-popup show="{{showStartTimePicker}}" round position="bottom" bind:close="closeStartTimePicker">
+    <view class="picker-header">
+      <text class="cancel" bindtap="closeStartTimePicker">取消</text>
+      <text>选择开始时间</text>
+      <text class="confirm" bindtap="confirmStartTime">确定</text>
+    </view>
+    <van-picker columns="{{ startTimeColumns }}" bind:change="onStartTimeChange" />
+  </van-popup>
+
+  <view class="seat-card">
+    <view class="seat-icon">🪑</view>
+    <view class="seat-info">
+      <text class="seat-no">{{seatInfo.seatNo || seatInfo.seatId}}</text>
+      <text class="seat-floor">{{floor}}楼 · {{seatInfo.type === 'single' ? '单人座' : '小组座'}}</text>
+    </view>
+    <view class="seat-tags">
+      <van-tag wx:if="{{seatInfo.features.includes('power')}}" type="warning" size="small">⚡ 电源</van-tag>
+      <van-tag wx:if="{{seatInfo.features.includes('window')}}" type="primary" size="small">🪟 窗边</van-tag>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">选择预约时段</view>
+    <view class="date-badge">
+      <van-icon name="clock-o" size="18px" />
+      <text>{{today}}</text>
+    </view>
+
+    <view class="time-selector">
+      <view class="time-row">
+        <view class="time-label">开始时间 <text class="hint">（当前时间~30分钟内）</text></view>
+        <view class="time-picker-btn" bindtap="openStartTimePicker">
+          <text>{{startTime || '选择开始时间'}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+
+      <view class="time-row">
+        <view class="time-label">预约时长</view>
+        <picker mode="selector" value="{{durationIndex}}" range="{{durationOptions}}" bindchange="onDurationChange">
+          <view class="time-picker-btn">
+            <text>{{duration}}分钟</text>
+            <text class="arrow">›</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="conflict-tip" wx:if="{{timeConflict}}">
+      {{timeConflict}}
+    </view>
+  </view>
+
+  <view class="confirm-bar" wx:if="{{startTime && endTime && duration > 0 && duration <= 180 && !timeConflict}}">
+    <view class="confirm-info">
+      <text class="confirm-time">{{startTime}} - {{endTime}}</text>
+      <text class="confirm-dur">{{duration}}分钟</text>
+    </view>
+    <van-button type="primary" round block bindtap="onConfirmReservation" loading="{{loading}}">
+      确认预约
+    </van-button>
+  </view>
+</view>

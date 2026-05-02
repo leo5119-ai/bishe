@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "openapi": [],
+    "db": {
+      "COLLECTION_META:reservations": "read",
+      "COLLECTION_META:users": "read"
+    }
+  }
+}
